@@ -4,7 +4,7 @@ function GameManager(size, InputManager, Actuator, ScoreManager) {
   this.scoreManager = new ScoreManager;
   this.actuator     = new Actuator;
 
-  this.startTiles   = 2;
+  this.startTiles   = 3;
 
   this.inputManager.on("move", this.move.bind(this));
   this.inputManager.on("restart", this.restart.bind(this));
@@ -59,7 +59,7 @@ GameManager.prototype.addStartTiles = function () {
 // Adds a tile in a random position
 GameManager.prototype.addRandomTile = function () {
   if (this.grid.cellsAvailable()) {
-    var value = Math.random() < 0.9 ? 1 : 3;
+    var value = Math.random() < 0.9 ? 1 : 1;
     var tile = new Tile(this.grid.randomAvailableCell(), value);
 
     this.grid.insertTile(tile);
@@ -136,7 +136,7 @@ GameManager.prototype.move = function (direction) {
         }
         // Only one merger per row traversal?
         if (next && next.value === tile.value && next2 && next2.value === tile.value && !next.mergedFrom && next != next2) {
-          var merged = new Tile(pos2.next, tile.value * 3);
+          var merged = new Tile(pos2.next, tile.value + 1);
           merged.mergedFrom = [next2, next, tile];
 	tile.merged = true;
 	next.merged = true;
@@ -153,8 +153,8 @@ GameManager.prototype.move = function (direction) {
           // Update the score
           self.score += merged.value;
 
-          // The mighty 729 tile
-          if (merged.value === 729) self.won = true;
+          // The mighty 8 tile
+          if (merged.value === 8) self.won = true;
         }
         
 	 else if (!tile.merged){
